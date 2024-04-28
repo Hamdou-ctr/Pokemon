@@ -25,7 +25,7 @@ async function fetchPokemonData(pokemonName) {
     const pokemonData = await fetchPokemonData(pokemonName);
     const evolutionData = await fetchEvolutionData(pokemonName);
     
-    console.log('Evolutionstheorie von', pokemonName, ':', evolutionData.evolution_chain);
+   // console.log('Evolutionstheorie von', pokemonName, ':', evolutionData.evolution_chain);
   }
   
   // Beispielaufruf zum Anzeigen der Evolutionstheorie von Pikachu

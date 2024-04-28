@@ -1,7 +1,7 @@
 let baseUrl = "https://pokeapi.co/api/v2/pokemon/";
 let currentPokemon;
 let allPokemon = [];
-let numberOfPokemon = 100;
+let numberOfPokemon = 20;
 
 let typePokemonBackgroundColor = {
   grass: "rgb(0, 102, 0)",
@@ -64,6 +64,10 @@ async function loadAllPokemon() {
   allPokemon = await Promise.all(
     allPokemonResponses.map((response) => response.json())
   );
+  renderAllPokemon();
+}
+
+async function renderAllPokemon() {
   for (let i = 1; i <= numberOfPokemon; i++) {
     let currentPokemon = await loadPokemon(i);
     renderPokemon(currentPokemon);
@@ -75,8 +79,8 @@ async function loadAllPokemon() {
 
 async function loadNextPokemon() {
   numberOfPokemon += 50;
-  document.getElementById("pokedex").innerHTML = "";
-  await loadAllPokemon();
+  let newNumberOfPokemon = (document.getElementById("pokedex").innerHTML = "");
+  newNumberOfPokemon.innerHTML = await loadAllPokemon();
 }
 
 async function loadPokemon(i) {
@@ -131,7 +135,11 @@ function pokemonHtml(currentPokemon) {
 } */
 
 function generateBackgroundColor(currentPokemon) {
-  if (currentPokemon && currentPokemon.types && currentPokemon.types.length > 0) {
+  if (
+    currentPokemon &&
+    currentPokemon.types &&
+    currentPokemon.types.length > 0
+  ) {
     let type = currentPokemon.types[0].type.name;
     return typePokemonBackgroundColor[type] || "blue";
   } else {
@@ -139,12 +147,17 @@ function generateBackgroundColor(currentPokemon) {
   }
 }
 
-
 function generateBackgroundColorTypeDiv(currentPokemon) {
-  if (currentPokemon && currentPokemon.types && currentPokemon.types.length > 0) {
-  let type = currentPokemon.types[0].type.name;
-  return typePokemonBackgroundColorDiv[type] || "blue";
-  }else {return "blue"}
+  if (
+    currentPokemon &&
+    currentPokemon.types &&
+    currentPokemon.types.length > 0
+  ) {
+    let type = currentPokemon.types[0].type.name;
+    return typePokemonBackgroundColorDiv[type] || "blue";
+  } else {
+    return "blue";
+  }
 }
 
 async function startSearch() {
@@ -160,19 +173,20 @@ async function searchPokemonName(search) {
   let pokemonName = document.getElementById("pokedex");
   pokemonName.innerHTML = "";
   let count = 0;
-  for (let i = 1; i <= numberOfPokemon; i++) { // Anpassung der Schleifenbedingung
+  for (let i = 1; i <= numberOfPokemon; i++) {
+    // Anpassung der Schleifenbedingung
     let currentPokemon = await loadPokemon(i);
     if (currentPokemon.name.toLowerCase().includes(search)) {
       renderPokemon(currentPokemon);
       count++;
       console.log("Aktuelles Pokémon ist.", currentPokemon);
-      if (count >= numberOfPokemon) { // Anpassung der Bedingung für das Beenden der Schleife
+      if (count >= numberOfPokemon) {
+        // Anpassung der Bedingung für das Beenden der Schleife
         break;
       }
     }
   }
 }
-
 
 /*
 function startSearch(){
@@ -211,21 +225,24 @@ async function searchPokemonName() {
   }
 } */
 
-
 function nextPokemon(id) {
-  let currentPokemonIndex = allPokemon.findIndex((pokemon) => pokemon.id === id);
+  let currentPokemonIndex = allPokemon.findIndex(
+    (pokemon) => pokemon.id === id
+  );
   let numberOfPokemon = allPokemon.length;
   let nextPokemonIndex = (currentPokemonIndex + 1) % numberOfPokemon;
 
   if (nextPokemonIndex === 0) {
-    return allPokemon[numberOfPokemon - 1]; // Gehe zum letzten Pokémon, wenn das aktuelle das erste ist
+    alert("Das ist der erste Pokemon");
+    init();
+    return;
+    //return allPokemon[numberOfPokemon]; // Gehe zum letzten Pokémon, wenn das aktuelle das erste ist
   } else if (nextPokemonIndex === currentPokemonIndex) {
     return allPokemon[0]; // Gehe zum ersten Pokémon, wenn das aktuelle das letzte ist
   } else {
     return allPokemon[nextPokemonIndex]; // Ansonsten gehe zum nächsten Pokémon in der Liste
   }
 }
-
 
 function pokemonInfo(id) {
   let currentPokemon = allPokemon.find((pokemon) => pokemon.id === id);
@@ -236,15 +253,15 @@ function pokemonInfo(id) {
 
   about(currentPokemon.id);
   renderChart(currentPokemon);
-  //EvaluationChart(currentPokemon);
   movesChart(currentPokemon);
 }
 
 function pokemonInfoHtml(currentPokemon) {
-  let backgroundColorPokemonType = generateBackgroundColor(currentPokemon);
-  let typePokemonBackgroundColorDiv =
-    generateBackgroundColorTypeDiv(currentPokemon);
-  return /* html */ `
+  if (currentPokemon && currentPokemon.name) {
+    let backgroundColorPokemonType = generateBackgroundColor(currentPokemon);
+    let typePokemonBackgroundColorDiv =
+      generateBackgroundColorTypeDiv(currentPokemon);
+    return /* html */ `
     <div class="CenteredColumnContainer">
       <div class="PokemonOverlay">
         <div class="PokemonInfoDiv">
@@ -258,12 +275,12 @@ function pokemonInfoHtml(currentPokemon) {
                 <div class="PokemonTypeDivInfo">
                   <p>Type:</p>
                   <p style="background-color: ${typePokemonBackgroundColorDiv};">${
-    currentPokemon.types[0].type.name
-  }
+      currentPokemon.types[0].type.name
+    }
                   </p>
                   <p style="background-color: ${typePokemonBackgroundColorDiv};">${
-    currentPokemon.types.length > 1 ? currentPokemon.types[1].type.name : ""
-  }
+      currentPokemon.types.length > 1 ? currentPokemon.types[1].type.name : ""
+    }
                   </p>
                 </div>
               </div>
@@ -287,7 +304,7 @@ function pokemonInfoHtml(currentPokemon) {
                   })" href="#"> About
                   </a>
                   <a class="quickLink" onclick="baseStats()" href="#">Base Stats</a>
-                   <a class="quickLink" onclick="evaluation()" href="#">Evaluation</a> 
+                   <!-- <a class="quickLink" onclick="evaluation()" href="#">Evaluation</a>  -->
                   <a class="quickLink" onclick="moves()" href="#">Moves</a>
                 </div>
               </div>
@@ -313,18 +330,19 @@ function pokemonInfoHtml(currentPokemon) {
       </div>
     </div>
   `;
+  }
 }
 
-function detailedInfo(foundPokemon) {
-  let typePokemonBackgroundColorDivInfo =
-    generateBackgroundColorTypeDiv(foundPokemon);
+function detailedInfoHtml(foundPokemon) {
+  let typePokemonBackgroundColorDivInfo = generateBackgroundColorTypeDiv(foundPokemon);
   return /* html*/ `
     <div class="About" >
       <p style="background-color: ${typePokemonBackgroundColorDivInfo};"> <b>Species</b> ${
-    foundPokemon.species
-  } </p>
+        foundPokemon.species
+        }
+       </p>
       <p style="background-color: ${typePokemonBackgroundColorDivInfo};"> <b>height</b> ${
-    foundPokemon.height
+       foundPokemon.height
   } Cm</p>
       <p style="background-color: ${typePokemonBackgroundColorDivInfo};"> <b>weight</b> ${
     foundPokemon.weight
@@ -360,9 +378,8 @@ function about(id) {
   document.getElementById("Moves").classList.replace("Moves", "hidden");
   document.getElementById("About").classList.replace("hidden", "About");
   let aboutDeteil = document.getElementById("About");
-  aboutDeteil.innerHTML = detailedInfo(foundPokemon);
-  detailedInfo(foundPokemon);
-  console.log(detailedInfo(foundPokemon));
+  aboutDeteil.innerHTML = detailedInfoHtml(foundPokemon);
+  //console.log(detailedInfoHtml(foundPokemon));
 }
 
 function baseStats() {
