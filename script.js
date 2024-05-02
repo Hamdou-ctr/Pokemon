@@ -77,11 +77,6 @@ async function renderAllPokemon() {
   console.log("Loaded all Pokémon", allPokemon);
 }
 
-async function loadNextPokemon() {
-  numberOfPokemon += 50;
-  let newNumberOfPokemon = (document.getElementById("pokedex").innerHTML = "");
-  newNumberOfPokemon.innerHTML = await loadAllPokemon();
-}
 
 async function loadPokemon(i) {
   let url = baseUrl + i;
@@ -188,33 +183,6 @@ async function searchPokemonName(search) {
   }
 }
 
-/*
-function startSearch(){
-  let search = document.getElementById("search").value.trim().toLowerCase();
-  if (search.length < 2) {
-    searchPokemonName();
-  } else if (search.length === 0) {
-    init();
-  }
-}
-
-async function searchPokemonName() {
-  let pokemonName = document.getElementById("pokedex");
-  pokemonName.innerHTML = "";
-  let count = 0;
-  for (let i = 2; i <= numberOfPokemon; i++) {
-    let currentPokemon = await loadPokemon(i);
-    if (currentPokemon.name.toLowerCase().includes(search)) {
-      renderPokemon(currentPokemon);
-      count++;
-      console.log("Aktuelles Pokémon ist.", currentPokemon);
-      if (count >= i++) {
-        break;
-      }
-    }
-  }
-}
-
 /* function nextPokemon(id){
   let currentPokemon = allPokemon.find((pokemon) => pokemon.id === id);
   let numberOfPokemon = currentPokemon.length;
@@ -225,6 +193,12 @@ async function searchPokemonName() {
   }
 } */
 
+async function loadNextPokemon() {
+  numberOfPokemon += 50;
+  document.getElementById("pokedex").innerHTML = "";
+  await loadAllPokemon();
+}
+
 function nextPokemon(id) {
   let currentPokemonIndex = allPokemon.findIndex(
     (pokemon) => pokemon.id === id
@@ -233,10 +207,11 @@ function nextPokemon(id) {
   let nextPokemonIndex = (currentPokemonIndex + 1) % numberOfPokemon;
 
   if (nextPokemonIndex === 0) {
-    alert("Das ist der erste Pokemon");
+    //closePokemon();
+    document.getElementById("info-pokemon-Container").style = "display: none;";
     init();
-    return;
-    //return allPokemon[numberOfPokemon]; // Gehe zum letzten Pokémon, wenn das aktuelle das erste ist
+    //location.reload();
+    //return allPokemon[numberOfPokemon - 1]; // Gehe zum letzten Pokémon, wenn das aktuelle das erste ist
   } else if (nextPokemonIndex === currentPokemonIndex) {
     return allPokemon[0]; // Gehe zum ersten Pokémon, wenn das aktuelle das letzte ist
   } else {
@@ -244,6 +219,7 @@ function nextPokemon(id) {
   }
 }
 
+ 
 function pokemonInfo(id) {
   let currentPokemon = allPokemon.find((pokemon) => pokemon.id === id);
   let onePokemon = document.getElementById("info-pokemon-Container");
@@ -304,7 +280,7 @@ function pokemonInfoHtml(currentPokemon) {
                   })" href="#"> About
                   </a>
                   <a class="quickLink" onclick="baseStats()" href="#">Base Stats</a>
-                   <!-- <a class="quickLink" onclick="evaluation()" href="#">Evaluation</a>  -->
+                   <a class="quickLink" onclick="evaluation()" href="#">Evaluation</a>  
                   <a class="quickLink" onclick="moves()" href="#">Moves</a>
                 </div>
               </div>
@@ -334,15 +310,16 @@ function pokemonInfoHtml(currentPokemon) {
 }
 
 function detailedInfoHtml(foundPokemon) {
-  let typePokemonBackgroundColorDivInfo = generateBackgroundColorTypeDiv(foundPokemon);
+  let typePokemonBackgroundColorDivInfo =
+    generateBackgroundColorTypeDiv(foundPokemon);
   return /* html*/ `
     <div class="About" >
       <p style="background-color: ${typePokemonBackgroundColorDivInfo};"> <b>Species</b> ${
-        foundPokemon.species
-        }
+    foundPokemon.species
+  }
        </p>
       <p style="background-color: ${typePokemonBackgroundColorDivInfo};"> <b>height</b> ${
-       foundPokemon.height
+    foundPokemon.height
   } Cm</p>
       <p style="background-color: ${typePokemonBackgroundColorDivInfo};"> <b>weight</b> ${
     foundPokemon.weight
