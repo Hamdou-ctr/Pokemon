@@ -17,14 +17,28 @@ body {
 }
 
 header {
+  position: fixed;
   display: flex;
+  width: 100%;
   justify-content: space-around;
   align-items: center;
-  background-color: rgb(66, 61, 61);
+  background-color: rgb(128, 123, 123);
   height: 10vh;
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: auto;
+  box-shadow: 0px 0px 6px 0.5px;
+  top: 0;
+  bottom: 10vh;
+}
+
+.icon-search {
+  padding-right: 25px;
+  background: url("image./search.svg") no-repeat right;
+  background-size: 20px;
+  background-color: white;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 .pokedex-logo {
@@ -40,6 +54,7 @@ header {
   flex-grow: 1;
   flex-shrink: 0;
   flex-basis: auto;
+  margin-top: 10vh;
 }
 
 .pokedex-opacity {
@@ -70,6 +85,7 @@ button:hover {
   cursor: pointer;
   background-color: rgb(71, 71, 206);
   font-size: 28px;
+  height: 45px;
 }
 
 .d-non {
@@ -144,79 +160,37 @@ button:hover {
   border-radius: 4px;
 }
 
-.CenteredColumnContainer {
-  display: flex;
-  width: 100%;
-  max-height: 80vh;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 0;
-  margin-bottom: 0;
-  gap: 16px;
-}
-
-.PokemonOverlay {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  box-sizing: border-box;
-  margin-bottom: 0;
-  margin-top: 0;
-  width: 100%;
-}
-
-.PokemonInfoDiv {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
 .border {
   display: flex;
   width: 650px;
-  height: 95vh;
-  max-height: 700px;
+  max-height: 90vh;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border-width: 5px;
   border: solid rgb(11, 174, 219);
   border-radius: 16px;
+  box-sizing: border-box;
 }
 
 .AllPokemonInfoAllPokemonInfo {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   width: 100%;
   height: 32.7vh;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
 }
 
-.AllPokemonInfo {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
-  height: 30vh;
-}
-
 .NameAndIdDivInfo {
   display: flex;
-  flex-direction: column;
   width: 100%;
   justify-content: center;
   align-items: center;
   color: white;
-  margin-top: 8px;
+  margin: -50px 0px 150px 0px;
 }
 
 .NameIdDivInfo {
@@ -226,20 +200,17 @@ button:hover {
   gap: 8px;
 }
 
-.PokemonTypeDivInfo {
+.OnPokemonImage-div {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 150px;
-  gap: 8px;
+  max-width: 50%;
 }
 
 .OnPokemonImage {
   position: absolute;
-  display: flex;
-  height: 200px;
-  margin-bottom: 80px;
-  margin-top: 30vh;
+  height: 250px;
+  max-width: 50%;
 }
 
 .ChartJsDiv {
@@ -305,38 +276,38 @@ button:hover {
   margin-top: 28px;
 }
 
-b {
-  margin-right: 50px;
-}
-
-.Base-Stats{
+.Base-Stats {
   display: flex;
   justify-content: center;
 }
 
-.Moves{
+.Moves {
   display: flex;
   justify-content: center;
 }
 
 canvas {
   height: 30vh !important;
- /*  width: 100% !important; */
 }
 
 .About {
   display: flex;
+  justify-content: center;
+  align-items: center;
   color: white;
   flex-direction: column;
   height: 30vh;
   padding: 4px;
   box-sizing: border-box;
+  margin-top: 28px;
 }
 
 .About p {
   display: flex;
+  justify-content: space-between;
+  width: 80%;
   border-radius: 8px;
-  padding: 4px;
+  padding: 8px;
   margin: 2px;
 }
 
@@ -368,9 +339,22 @@ footer {
   text-decoration: underline;
 }
 
-@media (max-width: 678px){
+.Location {
+  display: flex;
+  gap: 30px;
+  color: white;
+  overflow: scroll;
+  min-height: 70px;
+}
+
+.Location:hover {
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+@media (max-width: 678px) {
   .border {
-   width: 100%;
+    width: 100%;
   }
 }
 
@@ -384,24 +368,12 @@ footer {
   }
 }
 
-@media (max-width: 550px) {
-  .OnPokemonImage {
-    position: absolute;
-    display: flex;
-    height: 200px;
-  }
-}
-
 @media only screen and (max-width: 400px) {
   .all-pokemon-div {
     width: 80%;
     flex-shrink: calc(2);
     flex-grow: calc(1);
   }
-
-  .border {
-   height: 94vh;
-   }
 
   .all-pokemon img {
     margin-right: 20%;

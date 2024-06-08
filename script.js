@@ -77,7 +77,6 @@ async function renderAllPokemon() {
   console.log("Loaded all Pokémon", allPokemon);
 }
 
-
 async function loadPokemon(i) {
   let url = baseUrl + i;
   let response = await fetch(url);
@@ -106,7 +105,7 @@ function pokemonHtml(currentPokemon) {
         <div class="pokemon-type-and-image-div">
           <div class="pokemon-type-div">
             <p>Type:</p>
-            <p class="pokemon-type" style="background-color: ${typePokemonBackgroundColorDiv};">${
+            <p class="pokemon-type" style="background-color: ${typePokemonBackgroundColorDiv}; padding: 4px;">${
     currentPokemon.types[0].type.name
   }
             </p>
@@ -124,22 +123,9 @@ function pokemonHtml(currentPokemon) {
   `;
 }
 
-/* function generateBackgroundColor(currentPokemon) {
+function generateBackgroundColor(currentPokemon) {
   let type = currentPokemon.types[0].type.name;
   return typePokemonBackgroundColor[type] || "blue";
-} */
-
-function generateBackgroundColor(currentPokemon) {
-  if (
-    currentPokemon &&
-    currentPokemon.types &&
-    currentPokemon.types.length > 0
-  ) {
-    let type = currentPokemon.types[0].type.name;
-    return typePokemonBackgroundColor[type] || "blue";
-  } else {
-    return "blue";
-  }
 }
 
 function generateBackgroundColorTypeDiv(currentPokemon) {
@@ -183,86 +169,44 @@ async function searchPokemonName(search) {
   }
 }
 
-/* function nextPokemon(id){
-  let currentPokemon = allPokemon.find((pokemon) => pokemon.id === id);
-  let numberOfPokemon = currentPokemon.length;
-  if ((currentPokemon.length = numberOfPokemon)) {
-    currentPokemon = 1;
-  }else if(currentPokemon.length = 0){
-    currentPokemon = numberOfPokemon;
-  }
-} */
-
 async function loadNextPokemon() {
-  numberOfPokemon += 50;
+  numberOfPokemon += 20;
   document.getElementById("pokedex").innerHTML = "";
   await loadAllPokemon();
 }
 
 function nextPokemon(id) {
-  let currentPokemonIndex = allPokemon.findIndex(
-    (pokemon) => pokemon.id === id
-  );
-  let numberOfPokemon = allPokemon.length;
-  let nextPokemonIndex = (currentPokemonIndex + 1) % numberOfPokemon;
-
-  if (nextPokemonIndex === 0) {
-    //closePokemon();
-    document.getElementById("info-pokemon-Container").style = "display: none;";
-    init();
-    //location.reload();
-    //return allPokemon[numberOfPokemon - 1]; // Gehe zum letzten Pokémon, wenn das aktuelle das erste ist
-  } else if (nextPokemonIndex === currentPokemonIndex) {
-    return allPokemon[0]; // Gehe zum ersten Pokémon, wenn das aktuelle das letzte ist
-  } else {
-    return allPokemon[nextPokemonIndex]; // Ansonsten gehe zum nächsten Pokémon in der Liste
-  }
-}
-
- 
-function pokemonInfo(id) {
   let currentPokemon = allPokemon.find((pokemon) => pokemon.id === id);
-  let onePokemon = document.getElementById("info-pokemon-Container");
-  onePokemon.innerHTML = pokemonInfoHtml(currentPokemon);
-  let nextPoke = nextPokemon(id);
-  addclassList();
-
-  about(currentPokemon.id);
-  renderChart(currentPokemon);
-  movesChart(currentPokemon);
+  let numberOfPokemon = currentPokemon.length;
+  console.log(numberOfPokemon);
+  if (currentPokemon.length === numberOfPokemon) {
+    closePokemon();
+    init();
+    //currentPokemon = 1;
+  } else if (currentPokemon.length === 0) {
+    closePokemon();
+    //location.reload();
+    //currentPokemon = numberOfPokemon[id];
+  }
 }
 
 function pokemonInfoHtml(currentPokemon) {
   if (currentPokemon && currentPokemon.name) {
     let backgroundColorPokemonType = generateBackgroundColor(currentPokemon);
-    let typePokemonBackgroundColorDiv =
-      generateBackgroundColorTypeDiv(currentPokemon);
     return /* html */ `
-    <div class="CenteredColumnContainer">
-      <div class="PokemonOverlay">
-        <div class="PokemonInfoDiv">
-          <div class="border"> 
+          <div class="border">
             <div class="AllPokemonInfoAllPokemonInfo" style="background-color: ${backgroundColorPokemonType};">
               <div class="NameAndIdDivInfo">
                 <div class="NameIdDivInfo">
                   <h1 class="h1">${currentPokemon.name.toUpperCase()}</h1>
                   <h1>№ ${currentPokemon.id}</h1>
                 </div>
-                <div class="PokemonTypeDivInfo">
-                  <p>Type:</p>
-                  <p style="background-color: ${typePokemonBackgroundColorDiv};">${
-      currentPokemon.types[0].type.name
-    }
-                  </p>
-                  <p style="background-color: ${typePokemonBackgroundColorDiv};">${
-      currentPokemon.types.length > 1 ? currentPokemon.types[1].type.name : ""
-    }
-                  </p>
-                </div>
               </div>
-              <img class="OnPokemonImage" src="${
-                currentPokemon.sprites.other.dream_world.front_default
-              }" alt="">
+              <div class="OnPokemonImage-div">
+                <img class="OnPokemonImage" src="${
+                  currentPokemon.sprites.other.dream_world.front_default
+                }" alt="">
+              </div>
             </div>
             <div class="ChartJsDiv">
               <div class="navigationLinks">
@@ -277,74 +221,109 @@ function pokemonInfoHtml(currentPokemon) {
                 <div class="quickLink-div">
                   <a class="quickLink" onclick="about(${
                     currentPokemon.id
-                  })" href="#"> About
-                  </a>
+                  })" href="#">About</a>
                   <a class="quickLink" onclick="baseStats()" href="#">Base Stats</a>
-                   <a class="quickLink" onclick="evaluation()" href="#">Evaluation</a>  
                   <a class="quickLink" onclick="moves()" href="#">Moves</a>
                 </div>
               </div>
 
-              <div class="About hidden" id="About">
-              </div>
+              <div class="About hidden" id="About"></div>
 
               <div class="Base-Stats hidden" id="Base-Stats">
-                 <canvas id="myChart"></canvas> 
+                <canvas id="myChart"></canvas>
               </div>
 
               <div class="Evaluation hidden" id="Evaluation">
-                <canvas id="myChartEvaluation"></canvas> 
+                <canvas id="myChartEvaluation"></canvas>
               </div>
 
               <div class="Moves hidden" id="Moves">
                 <canvas id="myChartMoves"></canvas>
               </div>
               <img class="directionPointer back" onclick="closePokemon()" src="image./road-sign.webp" alt="">
-            </div>  
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  `;
+    `;
   }
 }
 
-function detailedInfoHtml(foundPokemon) {
+async function fetchSpeciesData(url) {
+  let response = await fetch(url);
+  return await response.json();
+}
+
+async function fetchLocationAreaEncounters(url) {
+  let response = await fetch(url);
+  return await response.json();
+}
+
+async function detailedInfoHtml(foundPokemon) {
   let typePokemonBackgroundColorDivInfo =
     generateBackgroundColorTypeDiv(foundPokemon);
-  return /* html*/ `
-    <div class="About" >
-      <p style="background-color: ${typePokemonBackgroundColorDivInfo};"> <b>Species</b> ${
-    foundPokemon.species
+
+  let encounters = await fetchLocationAreaEncounters(
+    foundPokemon.location_area_encounters
+  );
+
+  let encounterLocations = encounters
+    .map((encounter) => encounter.location_area.name)
+    .join(", ");
+
+  let speciesData = await fetchSpeciesData(foundPokemon.species.url);
+
+  let genderRate = speciesData.gender_rate;
+  let gender = "Unknown";
+  if (genderRate === -1) {
+    gender = "Genderless";
+  } else {
+    let femalePercentage = (genderRate / 8) * 100;
+    let malePercentage = 100 - femalePercentage;
+    gender = `♂️ ${malePercentage}% / ♀️ ${femalePercentage}%`;
   }
-       </p>
-      <p style="background-color: ${typePokemonBackgroundColorDivInfo};"> <b>height</b> ${
-    foundPokemon.height
-  } Cm</p>
-      <p style="background-color: ${typePokemonBackgroundColorDivInfo};"> <b>weight</b> ${
-    foundPokemon.weight
-  } Gr</p>
-      <p style="background-color: ${typePokemonBackgroundColorDivInfo};"> <b>Abilities</b> ${
-    foundPokemon.abilities[0].ability.name
-  }, ${
-    foundPokemon.abilities.length > 1
-      ? foundPokemon.abilities[1].ability.name
-      : ""
-  }</p>
-      <p style="background-color: ${typePokemonBackgroundColorDivInfo};"> <b>Gender</b> ${
-    foundPokemon.species
-  } Gr</p>
-      <p style="background-color: ${typePokemonBackgroundColorDivInfo};"> <b>Egg Groups</b> ${
-    foundPokemon.base_experience
-  } Gr</p>
-      <p style="background-color: ${typePokemonBackgroundColorDivInfo};"> <b>Egg Cycle</b> ${
-    foundPokemon.base_experience
-  } Gr</p>
+
+  return /* html */ `
+    <div class="About">
+      <p style="background-color: ${typePokemonBackgroundColorDivInfo};">
+        <b>Height</b> ${foundPokemon.height * 10} cm
+      </p>
+      <p style="background-color: ${typePokemonBackgroundColorDivInfo};">
+        <b>Weight</b> ${(foundPokemon.weight / 10).toFixed(1)} kg
+      </p>
+      <p style="background-color: ${typePokemonBackgroundColorDivInfo};">
+        <b>Abilities</b> ${foundPokemon.abilities
+          .map((ability) => ability.ability.name)
+          .join(", ")}
+      </p>
+      <p style="background-color: ${typePokemonBackgroundColorDivInfo};">
+        <b>Gender</b> ${gender}
+      </p>
+      <p style="background-color: ${typePokemonBackgroundColorDivInfo};">
+        <b>Egg Groups</b> ${speciesData.egg_groups
+          .map((group) => group.name)
+          .join(", ")}
+      </p>
+      <p style="background-color: ${typePokemonBackgroundColorDivInfo};">
+        <b>Egg Cycle</b> ${speciesData.hatch_counter}
+      </p>
+       <p class="Location" style="background-color: ${typePokemonBackgroundColorDivInfo};">
+        <b>Location Area Encounters</b> ${encounterLocations}
+      </p>
     </div>
   `;
 }
 
-function about(id) {
+function pokemonInfo(id) {
+  let currentPokemon = allPokemon.find((pokemon) => pokemon.id === id);
+  let onePokemon = document.getElementById("info-pokemon-Container");
+  onePokemon.innerHTML = pokemonInfoHtml(currentPokemon);
+  addclassList();
+
+  about(currentPokemon.id);
+  renderChart(currentPokemon);
+  movesChart(currentPokemon);
+}
+
+async function about(id) {
   let foundPokemon = allPokemon.find((pokemon) => pokemon.id === id);
   document
     .getElementById("Base-Stats")
@@ -355,8 +334,8 @@ function about(id) {
   document.getElementById("Moves").classList.replace("Moves", "hidden");
   document.getElementById("About").classList.replace("hidden", "About");
   let aboutDeteil = document.getElementById("About");
-  aboutDeteil.innerHTML = detailedInfoHtml(foundPokemon);
-  //console.log(detailedInfoHtml(foundPokemon));
+  aboutDeteil.innerHTML = await detailedInfoHtml(foundPokemon);
+  console.log(await detailedInfoHtml(foundPokemon));
 }
 
 function baseStats() {
@@ -368,21 +347,6 @@ function baseStats() {
     .getElementById("Evaluation")
     .classList.replace("Evaluation", "hidden");
   document.getElementById("Moves").classList.replace("Moves", "hidden");
-}
-
-function evaluation(id) {
-  let foundPokemon = allPokemon.find((pokemon) => pokemon.id === id);
-  document.getElementById("About").classList.replace("About", "hidden");
-  document
-    .getElementById("Base-Stats")
-    .classList.replace("Base-Stats", "hidden");
-  document
-    .getElementById("Evaluation")
-    .classList.replace("hidden", "Evaluation");
-  document.getElementById("Moves").classList.replace("Moves", "hidden");
-  let Evolutionstheorie = document.getElementById("Evaluation");
-  Evolutionstheorie.innerHTML = displayEvolutionTheory(foundPokemon);
-  console.log(displayEvolutionTheory(foundPokemon));
 }
 
 function moves() {
