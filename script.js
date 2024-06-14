@@ -282,11 +282,11 @@ async function detailedInfoHtml(foundPokemon) {
   }
 
   return /* html */ `
-    <div class="About">
+    <div class="About-div">
       <p style="background-color: ${typePokemonBackgroundColorDivInfo};">
         <b>Height</b> ${foundPokemon.height * 10} cm
       </p>
-      <p style="background-color: ${typePokemonBackgroundColorDivInfo};">
+      <p class="pokemon-Weight" style="background-color: ${typePokemonBackgroundColorDivInfo};">
         <b>Weight</b> ${(foundPokemon.weight / 10).toFixed(1)} kg
       </p>
       <p style="background-color: ${typePokemonBackgroundColorDivInfo};">

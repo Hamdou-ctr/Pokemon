@@ -162,7 +162,7 @@ button:hover {
 
 .border {
   display: flex;
-  width: 650px;
+  max-width: 700px;
   max-height: 90vh;
   flex-direction: column;
   justify-content: center;
@@ -178,6 +178,8 @@ button:hover {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  box-sizing: border-box;
+  padding-top: 52px;
   width: 100%;
   height: 32.7vh;
   border-top-left-radius: 16px;
@@ -190,7 +192,7 @@ button:hover {
   justify-content: center;
   align-items: center;
   color: white;
-  margin: -50px 0px 150px 0px;
+  margin: -100px 0px 150px 0px;
 }
 
 .NameIdDivInfo {
@@ -208,9 +210,10 @@ button:hover {
 }
 
 .OnPokemonImage {
+  display: flex;
   position: absolute;
-  height: 250px;
-  max-width: 50%;
+  height: 230px;
+  bottom: 60vh;
 }
 
 .ChartJsDiv {
@@ -288,26 +291,45 @@ button:hover {
 
 canvas {
   height: 30vh !important;
+  width: 100% !important;
 }
 
-.About {
+/* .About {
   display: flex;
+  width: 100%;
   justify-content: center;
   align-items: center;
   color: white;
   flex-direction: column;
   height: 30vh;
-  padding: 4px;
   box-sizing: border-box;
-  margin-top: 28px;
+  /* padding: 20px 0px 0px 0px; 
+  overflow: scroll;
+} */
+
+.About-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  flex-direction: column;
+  height: 30vh;
+  box-sizing: border-box;
+  padding: 230px 0px 0px 0px;
+  overflow: scroll;
 }
 
 .About p {
   display: flex;
   justify-content: space-between;
-  width: 80%;
+  width: 90%;
   border-radius: 8px;
-  padding: 8px;
+  padding: 16px;
   margin: 2px;
 }
 
@@ -351,7 +373,7 @@ footer {
   cursor: pointer;
   text-transform: uppercase;
 }
-
+/*
 @media (max-width: 678px) {
   .border {
     width: 100%;
